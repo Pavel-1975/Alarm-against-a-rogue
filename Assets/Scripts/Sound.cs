@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
@@ -10,12 +11,7 @@ public class Sound : MonoBehaviour
 
     private float _currentStrength = 0;
     private float _maxStrength = 1;
-    private float _recoveryRate = 0.005f;
-
-    private void FixedUpdate()
-    {
-        SetVolume();
-    }
+    private const float _recoveryRate = 0.005f;
 
     public void Play()
     {
@@ -24,6 +20,8 @@ public class Sound : MonoBehaviour
         _audioSource.Play();
 
         _soundPlay = true;
+
+        StartCoroutine(WaitForTime(_recoveryRate));
     }
 
     public void Stop()
@@ -33,21 +31,32 @@ public class Sound : MonoBehaviour
 
     private void SetVolume()
     {
-        if (_soundPlay && _currentStrength < 1)
+        if (_soundPlay && _currentStrength <= 1)
         {
             _currentStrength = Mathf.MoveTowards(_currentStrength, _maxStrength, _recoveryRate);
 
             _audioSource.volume = _currentStrength;
+
+            StartCoroutine(WaitForTime(_recoveryRate));
         }
-        else if (_soundPlay == false && _currentStrength > 0)
+        else if (_soundPlay == false && _currentStrength >= 0)
         {
             _currentStrength = Mathf.MoveTowards(_currentStrength, _maxStrength, -_recoveryRate);
 
             _audioSource.volume = _currentStrength;
+
+            StartCoroutine(WaitForTime(_recoveryRate));
         }
     }
 
-    private void OnEnable()
+    private IEnumerator WaitForTime(float value)
+    {
+        yield return new WaitForSeconds(value);
+
+        SetVolume();
+    }
+
+        private void OnEnable()
     {
         _audioSource = GetComponent<AudioSource>();
     }
