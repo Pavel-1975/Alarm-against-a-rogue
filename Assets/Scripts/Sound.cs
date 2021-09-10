@@ -33,20 +33,21 @@ public class Sound : MonoBehaviour
     {
         if (_soundPlay && _currentStrength <= 1)
         {
-            _currentStrength = Mathf.MoveTowards(_currentStrength, _maxStrength, _recoveryRate);
-
-            _audioSource.volume = _currentStrength;
-
-            StartCoroutine(WaitForTime(_recoveryRate));
+            SetSoundVolume(_recoveryRate);
         }
         else if (_soundPlay == false && _currentStrength >= 0)
         {
-            _currentStrength = Mathf.MoveTowards(_currentStrength, _maxStrength, -_recoveryRate);
-
-            _audioSource.volume = _currentStrength;
-
-            StartCoroutine(WaitForTime(_recoveryRate));
+            SetSoundVolume(-_recoveryRate);
         }
+    }
+
+    private void SetSoundVolume(float recoveryRate)
+    {
+        _currentStrength = Mathf.MoveTowards(_currentStrength, _maxStrength, recoveryRate);
+
+        _audioSource.volume = _currentStrength;
+
+        StartCoroutine(WaitForTime(_recoveryRate));
     }
 
     private IEnumerator WaitForTime(float value)
@@ -56,7 +57,7 @@ public class Sound : MonoBehaviour
         SetVolume();
     }
 
-        private void OnEnable()
+    private void OnEnable()
     {
         _audioSource = GetComponent<AudioSource>();
     }
