@@ -19,7 +19,7 @@ public class Colision : MonoBehaviour
         if (collider.TryGetComponent<ColisionHouse>(out _))
         {
             _sound.Stop();
-            _door.SetOpen();
+            _door.OpenReset();
         }
     }
 }

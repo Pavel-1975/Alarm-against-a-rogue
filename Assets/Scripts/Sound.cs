@@ -8,9 +8,9 @@ public class Sound : MonoBehaviour
     private AudioSource _audioSource;
     private bool _soundPlay;
 
-    private float currStrength = 0;
-    private float maxStrength = 1;
-    private float recoveryRate = 0.005f;
+    private float _currentStrength = 0;
+    private float _maxStrength = 1;
+    private float _recoveryRate = 0.005f;
 
     private void FixedUpdate()
     {
@@ -33,17 +33,17 @@ public class Sound : MonoBehaviour
 
     private void SetVolume()
     {
-        if (_soundPlay && currStrength < 1)
+        if (_soundPlay && _currentStrength < 1)
         {
-            currStrength = Mathf.MoveTowards(currStrength, maxStrength, recoveryRate);
+            _currentStrength = Mathf.MoveTowards(_currentStrength, _maxStrength, _recoveryRate);
 
-            _audioSource.volume = currStrength;
+            _audioSource.volume = _currentStrength;
         }
-        else if (_soundPlay == false && currStrength > 0)
+        else if (_soundPlay == false && _currentStrength > 0)
         {
-            currStrength = Mathf.MoveTowards(currStrength, maxStrength, -recoveryRate);
+            _currentStrength = Mathf.MoveTowards(_currentStrength, _maxStrength, -_recoveryRate);
 
-            _audioSource.volume = currStrength;
+            _audioSource.volume = _currentStrength;
         }
     }
 

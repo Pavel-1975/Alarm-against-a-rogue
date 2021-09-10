@@ -24,7 +24,7 @@ public class Door : MonoBehaviour
         }
     }
 
-    public void SetOpen()
+    public void OpenReset()
     {
         _open = false;
     }
